@@ -1,0 +1,5 @@
+ENV = "ENV"
+
+TEST_ENV = "test"
+
+DEFAULT_ENV_AS_TEST = TEST_ENV
