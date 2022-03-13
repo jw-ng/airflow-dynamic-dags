@@ -92,9 +92,9 @@ services:
     container_name: airflow-postgresql
     image: bitnami/postgresql:latest
     environment:
-      - POSTGRESQL_DATABASE=bitnami_airflow
-      - POSTGRESQL_USERNAME=bn_airflow
-      - POSTGRESQL_PASSWORD=bitnami1
+      - POSTGRESQL_DATABASE=${AIRFLOW_DATABASE_NAME}
+      - POSTGRESQL_USERNAME=${AIRFLOW_DATABASE_USERNAME}
+      - POSTGRESQL_PASSWORD=${AIRFLOW_DATABASE_PASSWORD}
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - "5432:5432"

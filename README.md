@@ -44,6 +44,19 @@ make unit_tests
 
 ## Spinning up Airflow locally
 
+### Setting up environment variables
+
+You will first need to create the `.envrc` file using the `.envrc.template` file:
+
+```shell
+cp .envrc.template .envrc
+```
+
+Make the necessary modifications to the values in the `.envrc` file, as the sensitive
+values are just placeholders in the template file.
+
+### Starting the services
+
 You can also spin up an Airflow webserver and the other dependent services required by
 the DAGs in this repository using the following `make` command:
 
