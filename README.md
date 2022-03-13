@@ -20,8 +20,9 @@ pip install -r requirements.txt
 
 ## Testing
 
-To run the tests, you will first need to install the dev requirements. You can do so by
-running the following:
+### Installing test requirements
+
+You will first need to install the dev requirements:
 
 ```shell
 pipenv install --dev
@@ -31,4 +32,28 @@ Alternatively, you may use `pip` to install the dev packages:
 
 ```shell
 pip install -r requirements-dev.txt
+```
+
+### Running the tests
+
+Use the following `make` command to run the unit tests:
+
+```shell
+make unit_tests
+```
+
+## Spinning up Airflow locally
+
+You can also spin up an Airflow webserver and the other dependent services required by
+the DAGs in this repository using the following `make` command:
+
+```shell
+make dev
+```
+
+To spin up the services with seeded Airflow connections and variables, and also seeded
+MongoDB collections, use:
+
+```shell
+make seeded_dev
 ```

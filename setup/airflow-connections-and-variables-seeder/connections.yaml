@@ -1,0 +1,4 @@
+sources_mongo_db:
+  conn_type: mongo
+  host: airflow-mongodb
+  port: 27017

@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  test-runner:
+    environment:
+      - PYTHONPATH=/opt/bitnami/airflow
+      - AIRFLOW_HOME=/opt/bitnami/airflow
+      - AIRFLOW_EMAIL=${AIRFLOW_EMAIL}
+      - AIRFLOW_USERNAME=${AIRFLOW_USERNAME}
+      - AIRFLOW_PASSWORD=${AIRFLOW_PASSWORD}
+      - AIRFLOW_DATABASE_HOST=airflow-postgresql
+      - AIRFLOW_DATABASE_NAME=${AIRFLOW_DATABASE_NAME}
+      - AIRFLOW_DATABASE_USERNAME=${AIRFLOW_DATABASE_USERNAME}
+      - AIRFLOW_DATABASE_PASSWORD=${AIRFLOW_DATABASE_PASSWORD}
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW_LOAD_EXAMPLES=no
+      - AIRFLOW_SECRET_KEY=${AIRFLOW_SECRET_KEY}
+      - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
+      - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
+    command: >
+      bash -c "bash /src/scripts/wait_for_airflow_web.sh
+      && tail -f /dev/null"

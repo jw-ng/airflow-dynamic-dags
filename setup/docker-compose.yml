@@ -1,0 +1,106 @@
+version: '3.7'
+
+services:
+  airflow-web:
+    container_name: airflow-web
+    image: bitnami/airflow:latest
+    depends_on:
+      - mongodb
+      - postgresql
+      - redis
+    volumes:
+      - ../dags:/opt/bitnami/airflow/dags
+      - ../requirements.txt:/bitnami/python/requirements.txt
+    environment:
+      - PYTHONPATH=/opt/bitnami/airflow
+      - AIRFLOW_HOME=/opt/bitnami/airflow
+      - AIRFLOW_EMAIL=${AIRFLOW_EMAIL}
+      - AIRFLOW_USERNAME=${AIRFLOW_USERNAME}
+      - AIRFLOW_PASSWORD=${AIRFLOW_PASSWORD}
+      - AIRFLOW_DATABASE_HOST=airflow-postgresql
+      - AIRFLOW_DATABASE_NAME=${AIRFLOW_DATABASE_NAME}
+      - AIRFLOW_DATABASE_USERNAME=${AIRFLOW_DATABASE_USERNAME}
+      - AIRFLOW_DATABASE_PASSWORD=${AIRFLOW_DATABASE_PASSWORD}
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW_LOAD_EXAMPLES=no
+      - AIRFLOW_SECRET_KEY=${AIRFLOW_SECRET_KEY}
+      - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
+      - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+
+  airflow-scheduler:
+    container_name: airflow-scheduler
+    image: bitnami/airflow-scheduler:latest
+    depends_on:
+      - airflow-web
+    volumes:
+      - ../dags:/opt/bitnami/airflow/dags
+      - ../requirements.txt:/bitnami/python/requirements.txt
+    environment:
+      - PYTHONPATH=/opt/bitnami/airflow
+      - AIRFLOW_DATABASE_HOST=airflow-postgresql
+      - AIRFLOW_DATABASE_NAME=${AIRFLOW_DATABASE_NAME}
+      - AIRFLOW_DATABASE_USERNAME=${AIRFLOW_DATABASE_USERNAME}
+      - AIRFLOW_DATABASE_PASSWORD=${AIRFLOW_DATABASE_PASSWORD}
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW_LOAD_EXAMPLES=no
+      - AIRFLOW_SECRET_KEY=${AIRFLOW_SECRET_KEY}
+      - AIRFLOW_WEBSERVER_HOST=airflow-web
+      - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
+      - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
+      - SOURCES=["foo","bar"]
+
+  airflow-worker:
+    container_name: airflow-worker
+    image: bitnami/airflow-worker:latest
+    depends_on:
+      - airflow-web
+    volumes:
+      - ../dags:/opt/bitnami/airflow/dags
+      - ../requirements.txt:/bitnami/python/requirements.txt
+    environment:
+      - PYTHONPATH=/opt/bitnami/airflow
+      - AIRFLOW_DATABASE_HOST=airflow-postgresql
+      - AIRFLOW_DATABASE_NAME=${AIRFLOW_DATABASE_NAME}
+      - AIRFLOW_DATABASE_USERNAME=${AIRFLOW_DATABASE_USERNAME}
+      - AIRFLOW_DATABASE_PASSWORD=${AIRFLOW_DATABASE_PASSWORD}
+      - AIRFLOW_EXECUTOR=CeleryExecutor
+      - AIRFLOW_FERNET_KEY=${AIRFLOW_FERNET_KEY}
+      - AIRFLOW_LOAD_EXAMPLES=no
+      - AIRFLOW_SECRET_KEY=${AIRFLOW_SECRET_KEY}
+      - AIRFLOW_WEBSERVER_HOST=airflow-web
+      - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
+      - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
+      - SOURCES=["foo","bar"]
+
+  mongodb:
+    container_name: airflow-mongodb
+    image: mongo
+    command: mongod
+    ports:
+      - "27017:27017"
+
+  postgresql:
+    container_name: airflow-postgresql
+    image: bitnami/postgresql:latest
+    environment:
+      - POSTGRESQL_DATABASE=bitnami_airflow
+      - POSTGRESQL_USERNAME=bn_airflow
+      - POSTGRESQL_PASSWORD=bitnami1
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "5432:5432"
+
+  redis:
+    container_name: airflow-redis
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

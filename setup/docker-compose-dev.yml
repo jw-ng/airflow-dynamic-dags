@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  airflow-scheduler:
+    volumes:
+      - ./airflow-connections-and-variables-seeder/:/tmp/seed/
+
+  mongodb-seeder:
+    container_name: mongodb-seeder
+    build:
+      context: ./mongodb-seeder
+    depends_on:
+      - mongodb
