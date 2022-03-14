@@ -20,9 +20,9 @@ DEFAULT_SOURCES_ENV_VAR = "[]"
     schedule_interval=None,
 )
 def create_dag():
-    sources = get_sources()
-
     split_files_by_source = DummyOperator(task_id="split_files_by_source")
+
+    sources = get_sources()
 
     for source in sources:
         with TaskGroup(group_id=source) as task_group:
