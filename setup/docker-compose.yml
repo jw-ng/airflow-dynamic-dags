@@ -9,7 +9,6 @@ services:
       - postgresql
       - redis
     volumes:
-      - ../dags:/opt/bitnami/airflow/dags
       - ../requirements.txt:/bitnami/python/requirements.txt
     environment:
       - PYTHONPATH=/opt/bitnami/airflow
