@@ -18,9 +18,9 @@ SOURCES_VAR_NAME = "sources"
     schedule_interval=None,
 )
 def create_dag():
-    sources = Variable.get(SOURCES_VAR_NAME, default_var=[], deserialize_json=True)
-
     split_files_by_source = DummyOperator(task_id="split_files_by_source")
+
+    sources = Variable.get(SOURCES_VAR_NAME, default_var=[], deserialize_json=True)
 
     for source in sources:
         with TaskGroup(group_id=source) as task_group:
