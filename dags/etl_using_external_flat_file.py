@@ -6,15 +6,12 @@ from airflow.decorators import dag
 from airflow.operators.dummy import DummyOperator
 from airflow.utils.task_group import TaskGroup
 
+from constants import SOURCE_CONFIG_FILE_PATH
 from operators.extract_operator import ExtractOperator
 from operators.load_operator import LoadOperator
 from operators.transform_operator import TransformOperator
 
 DAG_ID = "etl_using_external_flat_file"
-
-DAG_DIR = Path(__file__).parent
-CONFIG_DIR = "configs"
-SOURCES_FILE = "sources.yaml"
 
 SOURCES = "sources"
 
@@ -27,7 +24,8 @@ SOURCES = "sources"
 def create_dag():
     split_files_by_source = DummyOperator(task_id="split_files_by_source")
 
-    source_config_file_path = DAG_DIR / CONFIG_DIR / SOURCES_FILE
+    source_config_file_path = Path(SOURCE_CONFIG_FILE_PATH)
+
     sources = []
 
     if source_config_file_path.exists():
