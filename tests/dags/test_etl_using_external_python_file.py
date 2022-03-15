@@ -25,6 +25,6 @@ class TestEtlUsingExternalPythonFile:
     @pytest.fixture
     def mock_sources(self, mocker):
         mocker.patch(
-            "etl_using_external_python_file.SOURCES",
-            ["foo", "bar", "baz"],
+            "etl_using_external_python_file.get_sources",
+            return_value=["foo", "bar", "baz"],
         )
