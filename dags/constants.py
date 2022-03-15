@@ -11,3 +11,7 @@ CONFIG_DIR = "configs"
 
 SOURCES_FILE_NAME = "sources.yaml"
 SOURCE_CONFIG_FILE_PATH = DAG_DIR / CONFIG_DIR / SOURCES_FILE_NAME
+
+# Python embedded config
+SOURCES_MODULE = "configs.sources"
+SOURCES_ATTRIBUTE_NAME = "SOURCES"
